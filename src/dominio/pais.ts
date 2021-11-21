@@ -41,7 +41,7 @@ export class Pais {
         return Math.round(this.poblacion / this.superficie);
     }
 
-    public vecinoMasPoblado(): Pais {
+    public vecinoMasPoblado(): Pais | undefined {
         const poblacionDePaisesLimitrofes = this.paisesLimitrofes.map((pais) => {
             return pais.poblacion;
         });
@@ -50,8 +50,7 @@ export class Pais {
         if (this.poblacion === mayorPoblacion) {
             return this;
         } else {
-            const pais = this.paisesLimitrofes.find(pais => pais.poblacion === mayorPoblacion);
-            return pais !== undefined ? pais : this
+            return this.paisesLimitrofes.find(pais => pais.poblacion === mayorPoblacion);
         }
     }
 

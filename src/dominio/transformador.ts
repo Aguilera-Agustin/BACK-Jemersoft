@@ -11,7 +11,7 @@ export class Transformador {
 
     public countriesApaises() {
         return this.countries.map( async(country: Country) => { 
-            const limitrofe = await this.getLimitrofe(country);
+            const limitrofe = await Promise.all(this.getLimitrofe(country));
             return new Pais(
                 country.name,
                 country.alpha3Code,
@@ -21,16 +21,21 @@ export class Transformador {
                 country.currencies[0]? country.currencies[0].code : 'USD',
                 0, // No se cua es cotizacionDolar de la api
                 limitrofe,
-                country.regionalBlocs.map( (bloc) => bloc.name ),
-                country.languages.map( (language) => language.name )
+                country.regionalBlocs?.map( (bloc) => bloc.name ),
+                country.languages?.map( (language) => language.name )
             )
         } )
     }
 
-    private async getLimitrofe(country: Country) {
+    private getLimitrofe(country: Country) {
         const api =  new RestCountriesAPI();
-        const data = await api.buscarPaisesPorNombre(country.name);
-        return data.map( (country: Country) => this.countryApais(country) ); 
+        const limitrofe = country.borders.map( async(code: string) => {
+            return await api.paisConCodigo(code);
+        });
+        return limitrofe.map( (limitrofe) => {
+            return limitrofe.then( (country) => {
+                return this.countryApais(country);});
+        });
     }
 
     public countryApais(country: Country) {
@@ -38,13 +43,13 @@ export class Transformador {
             country.name,
             country.alpha3Code,
             country.population,
-            country.area || country.population,
+            country.area? country.area : country.population,
             country.region,
             country.currencies[0]? country.currencies[0].code : 'USD',
             0, // No se cua es cotizacionDolar de la api
             [],
-            country.regionalBlocs.map( (bloc) => bloc.name ),
-            country.languages.map( (language) => language.name )
+            country.regionalBlocs?.map( (bloc) => bloc.name ),
+            country.languages?.map( (language) => language.name )
         )
     }
     

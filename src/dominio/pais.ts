@@ -24,7 +24,7 @@ export class Pais {
         this.continente = continente;
         this.codigoMoneda = codigoMoneda;
         this.cotizacionDolar = cotizacionDolar;
-        this.paisesLimitrofes = paisesLimitrofes;
+        this.paisesLimitrofes = paisesLimitrofes || [];
         this.bloquesRegionales = bloquesRegionales;
         this.idiomasOficiales = idiomasOficiales;
     }

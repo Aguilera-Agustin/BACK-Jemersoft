@@ -78,7 +78,7 @@ export class Pais {
         return this.cotizacionDolar > pais.cotizacionDolar ? false : true;
     }
 
-    public cuantoEquivaleEn(monto: number, pais: Pais) {
+    public cuantoEquivaleEn(monto: number, pais: Pais): number {
         const valorEnDolaresEnPaisOrigen = Math.round(monto / this.cotizacionDolar);
         return valorEnDolaresEnPaisOrigen * pais.cotizacionDolar;
     }

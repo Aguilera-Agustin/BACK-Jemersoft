@@ -1,5 +1,4 @@
-import { filter } from 'ramda';
-const R = require('ramda');
+import R from 'ramda'
 import { Pais } from './pais';
 export class Observatorio {
 
@@ -11,40 +10,40 @@ export class Observatorio {
 
     private obtenerPorNombre(nombreDelPais: string): Pais {
         const pais = this.paises.find(pais => pais.nombre === nombreDelPais);
-        return pais !== undefined ? pais : new Pais("", "", 0, 0, "", "", 0, [], [], []);
+        return pais ? pais : new Pais("", "", 0, 0, "", "", 0, [], [], []);
     }
 
-    public sonLimitrofes(nombrePrimerPais: string, nombreSegundoPais: string) {
+    public sonLimitrofes(nombrePrimerPais: string, nombreSegundoPais: string): boolean {
         const primerPais = this.obtenerPorNombre(nombrePrimerPais);
         const segundoPais = this.obtenerPorNombre(nombreSegundoPais);
         return primerPais.esLimitrofeDe(segundoPais);
     }
 
-    public necesitanTraduccion(nombrePrimerPais: string, nombreSegundoPais: string) {
+    public necesitanTraduccion(nombrePrimerPais: string, nombreSegundoPais: string):boolean {
         const primerPais = this.obtenerPorNombre(nombrePrimerPais);
         const segundoPais = this.obtenerPorNombre(nombreSegundoPais);
         return primerPais.necesitaTraduccionCon(segundoPais);
     }
 
-    public pertenecenAlMismoBloqueRegional(nombrePrimerPais: string, nombreSegundoPais: string) {
+    public pertenecenAlMismoBloqueRegional(nombrePrimerPais: string, nombreSegundoPais: string):boolean {
         const primerPais = this.obtenerPorNombre(nombrePrimerPais);
         const segundoPais = this.obtenerPorNombre(nombreSegundoPais);
         return primerPais.pertenecenAlMismoBloqueRegional(segundoPais);
     }
 
-    public potencialesAliados(nombrePrimerPais: string, nombreSegundoPais: string) {
+    public potencialesAliados(nombrePrimerPais: string, nombreSegundoPais: string):boolean {
         const primerPais = this.obtenerPorNombre(nombrePrimerPais);
         const segundoPais = this.obtenerPorNombre(nombreSegundoPais);
         return primerPais.potencialAliadoDe(segundoPais);
     }
 
-    public convieneIrDeCompras(nombrePrimerPais: string, nombreSegundoPais: string) {
+    public convieneIrDeCompras(nombrePrimerPais: string, nombreSegundoPais: string):boolean {
         const primerPais = this.obtenerPorNombre(nombrePrimerPais);
         const segundoPais = this.obtenerPorNombre(nombreSegundoPais);
         return primerPais.convieneIrDeComprasA(segundoPais);
     }
 
-    public cuantoEquivale(monto: number, nombrePrimerPais: string, nombreSegundoPais: string) {
+    public cuantoEquivale(monto: number, nombrePrimerPais: string, nombreSegundoPais: string):number {
         const primerPais = this.obtenerPorNombre(nombrePrimerPais);
         const segundoPais = this.obtenerPorNombre(nombreSegundoPais);
         return primerPais.cuantoEquivaleEn(monto, segundoPais);
@@ -52,11 +51,7 @@ export class Observatorio {
 
     public losMasPoblados(): string[] {
         this.paises.sort((a, b) => a.poblacion > b.poblacion ? -1 : a.poblacion < b.poblacion ? 1 : 0)
-        return [this.paises[0].codigoIso3,
-        this.paises[1].codigoIso3,
-        this.paises[2].codigoIso3,
-        this.paises[3].codigoIso3,
-        this.paises[4].codigoIso3]
+        return this.paises.slice(0,5).map(pais => pais.codigoIso3);
     }
 
     public continenteConMasPaisesPlurinacionales(): string {
@@ -90,7 +85,7 @@ export class Observatorio {
         return continentes.sort((a, b) => a.cantidad > b.cantidad ? -1 : a.cantidad < b.cantidad ? 1 : 0)[0].nombre;
     }
 
-    public promedioDeDensidadPoblacional() {
+    public promedioDeDensidadPoblacional():number {
         const islas = this.paises.filter(pais => pais.esIsla());
         const poblacionTotal = R.sum(islas.map(pais => pais.poblacion));
         return poblacionTotal / islas.length;

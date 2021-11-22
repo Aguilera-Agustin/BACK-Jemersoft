@@ -9,7 +9,7 @@ export class Transformador {
         this.countries = countries;
     }
 
-    public countriesApais() {
+    public countriesApaises() {
         return this.countries.map( async(country: Country) => { 
             const limitrofe = await this.getLimitrofe(country);
             return new Pais(

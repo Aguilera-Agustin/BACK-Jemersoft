@@ -15,7 +15,7 @@ export class Transformador {
 
     public countriesApaises() {
         return this.countries.map( async(country: Country) => { 
-            const limitrofe = await Promise.all(this.getLimitrofe(country));
+            const limitrofe = await this.getLimitrofe(country);
             const cotizacion = await this.currencyApi.convertirDolarA(country.currencies[0]? country.currencies[0].code : 'USD');
             return new Pais(
                 country.name,
@@ -32,16 +32,38 @@ export class Transformador {
         } )
     }
 
-    private getLimitrofe(country: Country) {
+    // Esta función es asincrónica, hay que marcarla como tal.
+    private async getLimitrofe(country: Country): Promise<Pais[]> {
         const api =  new RestCountriesAPI();
-        const limitrofe = country.borders.map( async(code: string) => {
-            return await api.paisConCodigo(code);
-        });
-        return limitrofe.map( async (limitrofe) => {
-            const cotizacion = await this.currencyApi.convertirDolarA((await limitrofe).currencies[0]? (await limitrofe).currencies[0].code : 'USD');
-            return limitrofe.then( (country) => {
-                return this.countryApais(country, cotizacion);});
-        });
+        
+        // Esto se vuelve una lista de Promise<Country>,
+        // y tienen que esperarla si quieren seguir trabajando con ella.
+        // Para esperar a que una lista de promises termine, se usa Promise.all:
+        const limitrofe = await Promise.all(
+          country.borders.map((code: string) => api.paisConCodigo(code))
+        );
+
+        // Acá lo mismo, el map vuelve a transformar esto en una lista de promesas.
+        // Entonces hay que esperarlas :)
+        return Promise.all(
+          limitrofe.map(async (limitrofe) => {
+            const cotizacion = await this.currencyApi.convertirDolarA(limitrofe.currencies[0]?.code ?? 'USD');
+            return this.countryApais(country, cotizacion);
+          })
+        );
+
+        // También podrían simplificar el código y hacer un solo map que resuelva todo.
+        // Y ni hablar de que sería ideal que también reutilicen parte de esto en el método de más arriba
+        // (que es muy parecido).
+        // Quedaría así:
+
+        // return Promise.all(
+        //   country.borders.map(async (code: string) => {
+        //     const country = await api.paisConCodigo(code);
+        //     const cotizacion = await this.currencyApi.convertirDolarA(country.currencies[0]?.code ?? 'USD');
+        //     return this.countryApais(country, cotizacion);
+        //   })
+        // );
     }
 
     public countryApais(country: Country, cotizacion: number) {

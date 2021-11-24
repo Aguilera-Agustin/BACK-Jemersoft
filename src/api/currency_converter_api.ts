@@ -17,7 +17,13 @@ export class CurrencyConverterAPI extends RestAPI {
   }
 
   async convertirDolarA(codigoMoneda: string): Promise<number> {
-    const data = await this.obtenerRecurso<any>(`&q=USD_${codigoMoneda}`);
-    return data[`USD_${codigoMoneda}`];
+    try {
+      const data = await this.obtenerRecurso<any>(`&q=USD_${codigoMoneda}`);
+      return data[`USD_${codigoMoneda}`];
+    } catch (error) {
+      // Hack temporal para que no se rompa todo cuando se pasa del límite de requests.
+      console.log(error);
+      return 1;
+    }
   }
 }

@@ -16,7 +16,8 @@ export class Transformador {
     public countriesApaises() {
         return this.countries.map( async(country: Country) => { 
             const limitrofe = await this.getLimitrofe(country);
-            const cotizacion = await this.currencyApi.convertirDolarA(country.currencies[0]? country.currencies[0].code : 'USD');
+            //const cotizacion = await this.currencyApi.convertirDolarA(country.currencies[0]? country.currencies[0].code : 'USD');
+            const cotizacion=0
             return new Pais(
                 country.name,
                 country.alpha3Code,
@@ -43,12 +44,14 @@ export class Transformador {
           country.borders.map((code: string) => api.paisConCodigo(code))
         );
 
+
         // Acá lo mismo, el map vuelve a transformar esto en una lista de promesas.
         // Entonces hay que esperarlas :)
         return Promise.all(
           limitrofe.map(async (limitrofe) => {
-            const cotizacion = await this.currencyApi.convertirDolarA(limitrofe.currencies[0]?.code ?? 'USD');
-            return this.countryApais(country, cotizacion);
+            //const cotizacion = await this.currencyApi.convertirDolarA(limitrofe.currencies[0]?.code ?? 'USD');
+            const cotizacion=0;
+            return this.countryApais(limitrofe, cotizacion);
           })
         );
 

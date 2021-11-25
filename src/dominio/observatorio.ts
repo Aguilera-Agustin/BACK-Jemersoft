@@ -4,69 +4,73 @@ import { RestCountriesAPI } from '../api/rest_countries_api';
 import { Transformador } from './transformador';
 export class Observatorio {
 
-    public paises: Pais[];
+    public paises: Pais[] = [] ;
     public api: RestCountriesAPI
 
-    constructor(paises?: Pais[]) {
+    constructor() {
         this.api = new RestCountriesAPI();
-        this.paises = paises || []
     }
 
-    public async cargarDatosDeApi() {
-        const apiData = await this.api.todosLosPaises();
+    private async obtenerTodosLosPaises() {
+        if(this.paises.length===0){
+            const apiData = await this.api.todosLosPaises();
+            const transformador = await new Transformador(apiData); 
+            const data = await Promise.all(await transformador.countriesApaises());
+            this.paises = data;
+        }
+    }
+
+    private async obtenerPorNombre(nombreDelPais: string): Promise<Pais> {
+        const apiData = await this.api.buscarPaisesPorNombre(nombreDelPais);
         const transformador = await new Transformador(apiData); 
         const data = await Promise.all(await transformador.countriesApaises());
-        this.paises = data;
+        return data[0];
     }
 
-    private obtenerPorNombre(nombreDelPais: string): Pais {
-        const pais = this.paises.find(pais => pais.nombre === nombreDelPais);
-        return pais ? pais : new Pais("", "", 0, 0, "", "", 0, [], [], []);
-    }
-
-    public sonLimitrofes(nombrePrimerPais: string, nombreSegundoPais: string): boolean {
-        const primerPais = this.obtenerPorNombre(nombrePrimerPais);
-        const segundoPais = this.obtenerPorNombre(nombreSegundoPais);
-        console.log({miPais: this.paises})
+    public async sonLimitrofes(nombrePrimerPais: string, nombreSegundoPais: string):  Promise<boolean> {
+        const primerPais = await this.obtenerPorNombre(nombrePrimerPais);
+        const segundoPais = await this.obtenerPorNombre(nombreSegundoPais);
         return primerPais.esLimitrofeDe(segundoPais);
     }
 
-    public necesitanTraduccion(nombrePrimerPais: string, nombreSegundoPais: string):boolean {
-        const primerPais = this.obtenerPorNombre(nombrePrimerPais);
-        const segundoPais = this.obtenerPorNombre(nombreSegundoPais);
+    public async necesitanTraduccion(nombrePrimerPais: string, nombreSegundoPais: string): Promise<boolean> {
+        const primerPais = await this.obtenerPorNombre(nombrePrimerPais);
+        const segundoPais = await this.obtenerPorNombre(nombreSegundoPais);
         return primerPais.necesitaTraduccionCon(segundoPais);
     }
 
-    public pertenecenAlMismoBloqueRegional(nombrePrimerPais: string, nombreSegundoPais: string):boolean {
-        const primerPais = this.obtenerPorNombre(nombrePrimerPais);
-        const segundoPais = this.obtenerPorNombre(nombreSegundoPais);
+    public async pertenecenAlMismoBloqueRegional(nombrePrimerPais: string, nombreSegundoPais: string): Promise<boolean> {
+        const primerPais = await this.obtenerPorNombre(nombrePrimerPais);
+        const segundoPais = await this.obtenerPorNombre(nombreSegundoPais);
         return primerPais.pertenecenAlMismoBloqueRegional(segundoPais);
     }
 
-    public potencialesAliados(nombrePrimerPais: string, nombreSegundoPais: string):boolean {
-        const primerPais = this.obtenerPorNombre(nombrePrimerPais);
-        const segundoPais = this.obtenerPorNombre(nombreSegundoPais);
+    public async potencialesAliados(nombrePrimerPais: string, nombreSegundoPais: string): Promise<boolean> {
+        const primerPais = await this.obtenerPorNombre(nombrePrimerPais);
+        const segundoPais = await this.obtenerPorNombre(nombreSegundoPais);
         return primerPais.potencialAliadoDe(segundoPais);
     }
 
-    public convieneIrDeCompras(nombrePrimerPais: string, nombreSegundoPais: string):boolean {
-        const primerPais = this.obtenerPorNombre(nombrePrimerPais);
-        const segundoPais = this.obtenerPorNombre(nombreSegundoPais);
+    public async convieneIrDeCompras(nombrePrimerPais: string, nombreSegundoPais: string): Promise<boolean> {
+        const primerPais = await this.obtenerPorNombre(nombrePrimerPais);
+        const segundoPais = await this.obtenerPorNombre(nombreSegundoPais);
         return primerPais.convieneIrDeComprasA(segundoPais);
     }
 
-    public cuantoEquivale(monto: number, nombrePrimerPais: string, nombreSegundoPais: string):number {
-        const primerPais = this.obtenerPorNombre(nombrePrimerPais);
-        const segundoPais = this.obtenerPorNombre(nombreSegundoPais);
+    public async cuantoEquivale(monto: number, nombrePrimerPais: string, nombreSegundoPais: string): Promise<number> {
+        const primerPais = await this.obtenerPorNombre(nombrePrimerPais);
+        const segundoPais = await this.obtenerPorNombre(nombreSegundoPais);
         return primerPais.cuantoEquivaleEn(monto, segundoPais);
     }
 
-    public losMasPoblados(): string[] {
+    public async losMasPoblados(): Promise<string[]> {
+        await this.obtenerTodosLosPaises()
         this.paises.sort((a, b) => a.poblacion > b.poblacion ? -1 : a.poblacion < b.poblacion ? 1 : 0)
         return this.paises.slice(0,5).map(pais => pais.codigoIso3);
     }
 
-    public continenteConMasPaisesPlurinacionales(): string {
+    public async continenteConMasPaisesPlurinacionales(): Promise <string> {
+        await this.obtenerTodosLosPaises()        
         const africa = { nombre: "Africa", cantidad: 0 };
         const america = { nombre: "America", cantidad: 0 };
         const asia = { nombre: "Asia", cantidad: 0 };
@@ -97,7 +101,8 @@ export class Observatorio {
         return continentes.sort((a, b) => a.cantidad > b.cantidad ? -1 : a.cantidad < b.cantidad ? 1 : 0)[0].nombre;
     }
 
-    public promedioDeDensidadPoblacional():number {
+    public async promedioDeDensidadPoblacional():Promise<number> {
+        await this.obtenerTodosLosPaises()        
         const islas = this.paises.filter(pais => pais.esIsla());
         const poblacionTotal = R.sum(islas.map(pais => pais.poblacion));
         return poblacionTotal / islas.length;

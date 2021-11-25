@@ -55,7 +55,7 @@ export class Pais {
     }
 
     public esLimitrofeDe(pais: Pais): boolean {
-        return this.paisesLimitrofes.includes(pais);
+        return pais.paisesLimitrofes.filter(eachPais=>eachPais.nombre===this.nombre).length>0;
     }
 
     public necesitaTraduccionCon(pais: Pais): boolean {

@@ -120,13 +120,13 @@ export class Observatorio {
         return poblacionTotal / islas.length;
     }
 
-    private validarDuplicado(primerPais:string, segundoPais:string) :void{
+    private validarDuplicado(primerPais:string, segundoPais:string) :void{  //TODO: Faltan test
         if(primerPais === segundoPais) throw new ErrorDuplicado() 
     }
-    private validarMuchosPaises(country:Country[]) :void{
+    private validarMuchosPaises(country:Country[]) :void{ //TODO: Faltan test
         if(country.length > 0) throw new ErrorMuchosPaises() 
     }
-    private validarExistenciaPais(country:Country[]) :void{
+    private validarExistenciaPais(country:Country[]) :void{ //TODO: Faltan test
         if(isEmpty(country)) throw new ErrorNoExiste() 
     }
 }

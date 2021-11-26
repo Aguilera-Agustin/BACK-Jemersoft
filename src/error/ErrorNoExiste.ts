@@ -1,6 +1,6 @@
 export class ErrorNoExiste extends Error {
-    constructor(msg: string) {
-        super(msg);
+    constructor() {
+        super('Su búsqueda no se ajusta a ningún país existente');
         Object.setPrototypeOf(this, ErrorNoExiste.prototype);
     }
     msg():string {

@@ -1,6 +1,6 @@
 export class ErrorDuplicado extends Error {
-    constructor(msg: string) {
-        super(msg);
+    constructor() {
+        super('Los paises que usted ingresó son iguales');
         Object.setPrototypeOf(this, ErrorDuplicado.prototype);
     }
     msg():string {

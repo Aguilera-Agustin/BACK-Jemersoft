@@ -1,70 +1,8 @@
 import { Observatorio } from './observatorio';
-import { Pais } from './pais';
 import { ErrorDuplicado, ErrorNoExiste, ErrorMuchosPaises } from '../error';
 
 describe("Observatorio", () => {
-    const argentina = new Pais(
-        "Argentina",
-        "AR",
-        42000000,
-        2078000000,
-        "America",
-        "ARS",
-        205,
-        [],
-        ["MERCOSUR"],
-        ["Español"],
-    );
-    const brazil = new Pais(
-        "Brazil",
-        "BR",
-        212000000,
-        8516000000,
-        "America",
-        "RS",
-        6,
-        [argentina],
-        [],
-        ["Portugues", "Español"],
-    );
-    const uruguay = new Pais(
-        "Uruguay",
-        "UR",
-        3000000,
-        176215,
-        "America",
-        "UYU",
-        45,
-        [brazil, argentina],
-        ["MERCOSUR"],
-        ["Español"],
-    );
-    const hawai = new Pais(
-        "Hawai",
-        "HW",
-        1416000,
-        28311,
-        "America",
-        "USD",
-        1,
-        [],
-        [],
-        ["Ingles"],
-    );
-    const españa = new Pais(
-        "España",
-        "SP",
-        47000000,
-        500000,
-        "Europa",
-        "EUR",
-        1,
-        [],
-        [],
-        ["Español"],
-    );
-    argentina.paisesLimitrofes.push(brazil, uruguay);
-    brazil.paisesLimitrofes.push(uruguay);
+
     const observatorio = new Observatorio();
 
     describe("Metodos para mas de un pais", () => {

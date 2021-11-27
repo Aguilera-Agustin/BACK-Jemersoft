@@ -128,15 +128,12 @@ export class Observatorio {
   }
 
   private validarDuplicado(primerPais: string, segundoPais: string): void {
-    //TODO: Faltan test
     if (primerPais === segundoPais) throw new ErrorDuplicado();
   }
   private validarMuchosPaises(country: Country[]): void {
-    //TODO: Faltan test
     if (country.length > 1) throw new ErrorMuchosPaises();
   }
   private validarExistenciaPais(country: Country[]): void {
-    //TODO: Faltan test
     if (isEmpty(country)) throw new ErrorNoExiste();
   }
 }

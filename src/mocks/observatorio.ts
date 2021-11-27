@@ -104,36 +104,20 @@ export class Observatorio {
 
   public async continenteConMasPaisesPlurinacionales(): Promise<string> {
     await this.obtenerTodosLosPaises();
-    const africa = { nombre: "Africa", cantidad: 0 };
-    const america = { nombre: "America", cantidad: 0 };
-    const asia = { nombre: "Asia", cantidad: 0 };
-    const europa = { nombre: "Europa", cantidad: 0 };
-    const oceania = { nombre: "Oceania", cantidad: 0 };
+    const resultado = {} as { [key: string]: number };
     this.paises.forEach((pais) => {
-      if (pais.esPlurinacional()) {
-        switch (pais.continente) {
-          case "Africa":
-            africa.cantidad += 1;
-            break;
-          case "America":
-            america.cantidad += 1;
-            break;
-          case "Asia":
-            asia.cantidad += 1;
-            break;
-          case "Europa":
-            europa.cantidad += 1;
-            break;
-          case "Oceania":
-            oceania.cantidad += 1;
-            break;
-        }
+      if(!pais.esPlurinacional())
+        return;
+      if (!resultado[pais.continente]) {
+        resultado[pais.continente] = 1;
+      } else {
+        resultado[pais.continente] += 1;
       }
     });
-    const continentes = [africa, america, asia, europa, oceania];
-    return continentes.sort((a, b) =>
-      a.cantidad > b.cantidad ? -1 : a.cantidad < b.cantidad ? 1 : 0
-    )[0].nombre;
+    return Object.entries(resultado).sort((a, b) =>
+      a[1] > b[1] ? -1 : a[1] < b[1] ? 1 : 0
+    )[0][0];
+
   }
 
   public async promedioDeDensidadPoblacional(): Promise<number> {

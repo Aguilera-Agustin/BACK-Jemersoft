@@ -2,10 +2,9 @@ import R from 'ramda'
 import { Pais } from './pais';
 import { RestCountriesAPI, Country } from '../api/rest_countries_api';
 import { Transformador } from './transformador';
-import { ErrorDuplicado } from '../error/ErrorDuplicado';
-import { ErrorMuchosPaises } from '../error/ErrorMuchosPaises';
 import { isEmpty } from 'ramda';
-import { ErrorNoExiste } from '../error/ErrorNoExiste';
+import { ErrorDuplicado, ErrorNoExiste, ErrorMuchosPaises } from '../error';
+
 export class Observatorio {
 
     public paises: Pais[] = [] ;

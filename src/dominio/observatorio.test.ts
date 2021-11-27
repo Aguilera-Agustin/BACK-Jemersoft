@@ -1,8 +1,6 @@
-import { ErrorDuplicado } from '../error/ErrorDuplicado';
 import { Observatorio } from './observatorio';
 import { Pais } from './pais';
-import { ErrorNoExiste } from '../error/ErrorNoExiste';
-import { ErrorMuchosPaises } from '../error/ErrorMuchosPaises';
+import { ErrorDuplicado, ErrorNoExiste, ErrorMuchosPaises } from '../error';
 
 describe("Observatorio", () => {
     const argentina = new Pais(

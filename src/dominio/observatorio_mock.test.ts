@@ -1,7 +1,5 @@
-import { ErrorDuplicado } from "../error/ErrorDuplicado";
 import { Observatorio } from "../mocks/observatorio";
-import { ErrorNoExiste } from '../error/ErrorNoExiste';
-import { ErrorMuchosPaises } from '../error/ErrorMuchosPaises';
+import { ErrorDuplicado, ErrorNoExiste, ErrorMuchosPaises } from '../error';
 
 describe("Observatorio", () => {
   const observatorio = new Observatorio();

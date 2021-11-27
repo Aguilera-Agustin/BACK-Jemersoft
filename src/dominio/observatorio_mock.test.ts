@@ -1,4 +1,7 @@
+import { ErrorDuplicado } from "../error/ErrorDuplicado";
 import { Observatorio } from "../mocks/observatorio";
+import { ErrorNoExiste } from '../error/ErrorNoExiste';
+import { ErrorMuchosPaises } from '../error/ErrorMuchosPaises';
 
 describe("Observatorio", () => {
   const observatorio = new Observatorio();
@@ -65,33 +68,57 @@ describe("Observatorio", () => {
     });
   });
 
-  describe("Metodos para todos los paises", () => {
-    describe("losMasPoblados", () => {
-      it("Los 5 mas poblados por codigo ISO", async () => {
-        expect(await observatorio.losMasPoblados()).toEqual([
-          "USA",
-          "BRA",
-          "MEX",
-          "FRA",
-          "COL",
-        ]);
-      });
-    });
+    describe("Metodos para todos los paises", () => {
+        describe("losMasPoblados", () => {
+        it("Los 5 mas poblados por codigo ISO", async () => {
+            expect(await observatorio.losMasPoblados()).toEqual([
+            "USA",
+            "BRA",
+            "MEX",
+            "FRA",
+            "COL",
+            ]);
+        });
+        });
 
-    describe("continenteConMasPaisesPlurinacionales", () => {
-      it("Africa es el pais con mas plurinacionales", async () => {
-        expect(
-          await observatorio.continenteConMasPaisesPlurinacionales()
-        ).toEqual("Americas");
-      });
-    });
+        describe("continenteConMasPaisesPlurinacionales", () => {
+        it("Africa es el pais con mas plurinacionales", async () => {
+            expect(
+            await observatorio.continenteConMasPaisesPlurinacionales()
+            ).toEqual("Americas");
+        });
+        });
 
-    describe("promedioDeDensidadPoblacional", () => {
-      it("El promedio de las islas Hawai y España es", async () => {
-        expect(await observatorio.promedioDeDensidadPoblacional()).toEqual(
-          35174581.277777776
-        );
-      });
+        describe("promedioDeDensidadPoblacional", () => {
+        it("El promedio de las islas Hawai y España es", async () => {
+            expect(await observatorio.promedioDeDensidadPoblacional()).toEqual(
+            35174581.277777776
+            );
+        });
+        });
     });
-  });
+    
+    describe("Debe fallar", () => {
+        it("si se pasan dos paises iguales", async () => {
+            try {
+                await observatorio.necesitanTraduccion("Argentina", "Argentina")
+            } catch (error) {
+                expect(error).toBeInstanceOf(ErrorDuplicado)   
+            }
+        });
+        it("si el pais no existe", async () => {
+            try {
+                await observatorio.necesitanTraduccion("Argentina", "Sarasa")
+            } catch (error) {
+                expect(error).toBeInstanceOf(ErrorNoExiste)   
+            }
+        });
+        it("si se encuentran varios paises", async () => {
+            try {
+                await observatorio.necesitanTraduccion("Argentina", "A")
+            } catch (error) {
+                expect(error).toBeInstanceOf(ErrorMuchosPaises)   
+            }
+        });
+    });
 });

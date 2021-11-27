@@ -1,5 +1,8 @@
+import { ErrorDuplicado } from '../error/ErrorDuplicado';
 import { Observatorio } from './observatorio';
 import { Pais } from './pais';
+import { ErrorNoExiste } from '../error/ErrorNoExiste';
+import { ErrorMuchosPaises } from '../error/ErrorMuchosPaises';
 
 describe("Observatorio", () => {
     const argentina = new Pais(
@@ -130,6 +133,29 @@ describe("Observatorio", () => {
             it('El promedio de las islas Hawai y España es', async () => {
                 expect(await observatorio.promedioDeDensidadPoblacional()).toEqual(4310170.164705883);
             })
+        });
+    });
+    describe("Debe fallar", () => {
+        it("si se pasan dos paises iguales", async () => {
+            try {
+                await observatorio.necesitanTraduccion("Argentina", "Argentina")
+            } catch (error) {
+                expect(error).toBeInstanceOf(ErrorDuplicado)   
+            }
+        });
+        it("si el pais no existe", async () => {
+            try {
+                await observatorio.necesitanTraduccion("Argentina", "Sarasa")
+            } catch (error) {
+                expect(error).toBeInstanceOf(ErrorNoExiste)   
+            }
+        });
+        it("si se encuentran varios paises", async () => {
+            try {
+                await observatorio.necesitanTraduccion("Argentina", "A")
+            } catch (error) {
+                expect(error).toBeInstanceOf(ErrorMuchosPaises)   
+            }
         });
     });
 });

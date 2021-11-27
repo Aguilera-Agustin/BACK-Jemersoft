@@ -12,7 +12,7 @@ export class Transformador {
     this.currencyApi = new CurrencyConverterAPI("d956ad8ad88fce288555");
   }
 
-  public countriesApaises() {
+  public countriesApaises() :  Promise<Pais>[] {
     return this.countries.map(async (country: Country) => {
       const limitrofe = await this.getLimitrofe(country);
       const cotizacion = await this.currencyApi.convertirDolarA(
@@ -48,8 +48,8 @@ export class Transformador {
     // Entonces hay que esperarlas :)
     return Promise.all(
       limitrofe.map(async (limitrofe) => {
-        //const cotizacion = await this.currencyApi.convertirDolarA(limitrofe.currencies[0]?.code ?? 'USD');
-        const cotizacion = 0;
+        const cotizacion = await this.currencyApi.convertirDolarA(limitrofe.currencies[0]?.code ?? 'USD');
+        //const cotizacion = 0;
         return this.countryApais(limitrofe, cotizacion);
       })
     );

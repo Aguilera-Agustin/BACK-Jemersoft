@@ -13,23 +13,13 @@ export class Transformador {
         
     }
 
-    public countriesApaises() {
+    public countriesApaises() :  Promise<Pais>[] {
         return this.countries.map( async(country: Country) => { 
             const limitrofe = await this.getLimitrofe(country);
             //const cotizacion = await this.currencyApi.convertirDolarA(country.currencies[0]? country.currencies[0].code : 'USD');
             const cotizacion=0
-            return new Pais(
-                country.name,
-                country.alpha3Code,
-                country.population,
-                country.area || country.population,
-                country.region,
-                country.currencies[0]? country.currencies[0].code : 'USD',
-                cotizacion, 
-                limitrofe,
-                country.regionalBlocs?.map( (bloc) => bloc.name ),
-                country.languages?.map( (language) => language.name )
-            )
+            return this.countryApais(country, cotizacion, limitrofe);
+
         } )
     }
 
@@ -69,21 +59,19 @@ export class Transformador {
         // );
     }
 
-    public countryApais(country: Country, cotizacion: number) {
-      
-    
+    public countryApais(country: Country, cotizacion: number, limitrofe : Pais[] = []): Pais {
         return new Pais(
-            country.name,
-            country.alpha3Code,
-            country.population,
-            country.area? country.area : country.population,
-            country.region,
-            country.currencies[0]? country.currencies[0].code : 'USD',
-            cotizacion,
-            [],
-            country.regionalBlocs?.map( (bloc) => bloc.name ),
-            country.languages?.map( (language) => language.name )
-        )
-    }
+          country?.name ?? " ",
+          country.alpha3Code,
+          country.population,
+          country.area ? country.area : country.population,
+          country.region,
+          country.currencies[0] ? country.currencies[0].code : "USD",
+          cotizacion,
+          limitrofe,
+          country.regionalBlocs?.map((bloc) => bloc.name),
+          country.languages?.map((language) => language.name)
+        );
+      }
     
 }

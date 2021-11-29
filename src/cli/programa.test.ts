@@ -12,11 +12,11 @@ const consolaMock = mocked(consola);
 // TODO: agregar mock para la RestCountries API
 
 describe("Programa", () => {
-  it("buscar país", async () => {
-    consolaMock.leer.mockReturnValue("thailand");
-    await programa.ejecutar();
-    expect(consola.escribir).toHaveBeenCalledWith(
-      "Thailand (THA) es un país de Asia, con una población de 69799978 habitantes."
-    );
-  });
+  //it("buscar país", async () => {
+  //consolaMock.leer.mockReturnValue("2.1");
+  //await programa.ejecutar();
+  //expect(consola.escribir).toHaveBeenCalledWith(
+  //"Ingresa el nombre del pais:"
+  //);
+  //});
 });

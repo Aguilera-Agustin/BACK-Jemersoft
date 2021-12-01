@@ -18,7 +18,7 @@ export class Observatorio {
         const apiData = await this.api.buscarPaisesPorNombre(nombreDelPais);
         await this.validarMuchosPaises(apiData);
         await this.validarExistenciaPais(apiData);
-        const transformador = await new Transformador(apiData);
+        const transformador = new Transformador(apiData);
         const data = await Promise.all(await transformador.countriesApaises());
         return data[0];
     }
@@ -26,7 +26,7 @@ export class Observatorio {
     private async obtenerTodosLosPaises() {
         if (this.paises.length === 0) {
             const apiData = await this.api.todosLosPaises();
-            const transformador = await new Transformador(apiData);
+            const transformador = new Transformador(apiData);
             const data = await Promise.all(await transformador.countriesApaises());
             this.paises = data;
         }
@@ -76,7 +76,7 @@ export class Observatorio {
 
     public async losMasPoblados(): Promise<string[]> {
         await this.obtenerTodosLosPaises()
-        this.paises.sort((a, b) => a.poblacion > b.poblacion ? -1 : a.poblacion < b.poblacion ? 1 : 0)
+        this.paises.sort((a, b) => b.poblacion - a.poblacion)
         return this.paises.slice(0, 5).map(pais => pais.codigoIso3);
     }
 

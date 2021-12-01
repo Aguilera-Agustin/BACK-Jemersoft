@@ -64,7 +64,7 @@ export class Transformador {
           country?.name ?? " ",
           country.alpha3Code,
           country.population,
-          country.area ? country.area : country.population,
+          country.area ?? country.population,
           country.region,
           country.currencies[0] ? country.currencies[0].code : "USD",
           cotizacion,

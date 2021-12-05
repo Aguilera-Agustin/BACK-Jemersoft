@@ -1,9 +1,14 @@
-import { Observatorio } from "../mocks/observatorio";
 import { ErrorDuplicado, ErrorNoExiste, ErrorMuchosPaises } from '../error';
+import { CurrencyConverterAPI } from '../mocks/currency_converter_api';
+import { RestCountriesAPI } from '../mocks/rest_countries_api';
+import { Observatorio } from './observatorio';
+import { Transformador } from './transformador';
 
 describe("Observatorio", () => {
   const observatorio = new Observatorio();
-
+  observatorio.api = new RestCountriesAPI();
+  observatorio.currency = new CurrencyConverterAPI('d956ad8ad88fce288555')
+  observatorio.transformador = new Transformador(new CurrencyConverterAPI('d956ad8ad88fce288555'))
   describe("Metodos para mas de un pais", () => {
     describe("esLimitrofeDe", () => {
       it("Argentina no es limitrofe de Mexico", async () => {

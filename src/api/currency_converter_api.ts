@@ -8,7 +8,7 @@ está hecho. El ejercicio se tiene que resolver sin alterar para nada este archi
 import { RestAPI } from "./rest_api";
 
 export class CurrencyConverterAPI extends RestAPI {
-  constructor(private apiKey: string) {
+  constructor(public apiKey: string) {
     super();
   }
 

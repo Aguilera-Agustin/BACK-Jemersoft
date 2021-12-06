@@ -13,7 +13,8 @@ export default {
 
   async ejecutar(_args: string[] = []): Promise<void> {
     consola.escribir(AsciiArt.mundo);
-    while (true) {
+    let finish = true;
+    while (finish) {
       const observatorio = new Observatorio();
       const opcion = consola.leer(Menu.principal)
       let primerPais = null;
@@ -98,12 +99,12 @@ export default {
         case "4":
           console.clear();
           consola.escribir("Salir del programa");
-          exit();
+          finish = false;
           break
         default:
           console.clear();
           consola.escribir("Opcion incorrecta");
-          exit()
+          finish = false;
           break
       }
     }

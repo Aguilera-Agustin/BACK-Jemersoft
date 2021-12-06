@@ -1,7 +1,6 @@
 import { countriesMock } from "./rest_data";
-import { Country } from "../api/rest_countries_api";
-
-export class RestCountriesAPI {
+import { Country, RestCountriesAPI } from "../api/rest_countries_api";
+export class RestCountriesAPIMock extends RestCountriesAPI {
   paises: Country[] = countriesMock;
 
   async todosLosPaises(): Promise<Country[]> {

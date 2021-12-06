@@ -1,4 +1,4 @@
-import { RestCountriesAPI } from "./rest_countries_api";
+import { RestCountriesAPIMock } from "./rest_countries_api";
 import { Pais } from "../dominio/pais";
 import { CurrencyConverterAPI } from "./currency_converter_api";
 import { Country } from "../api/rest_countries_api";
@@ -12,7 +12,7 @@ export class Transformador {
     this.currencyApi = new CurrencyConverterAPI("d956ad8ad88fce288555");
   }
 
-  public countriesApaises() :  Promise<Pais>[] {
+  public countriesApaises(): Promise<Pais>[] {
     return this.countries.map(async (country: Country) => {
       const limitrofe = await this.getLimitrofe(country);
       const cotizacion = await this.currencyApi.convertirDolarA(
@@ -24,7 +24,7 @@ export class Transformador {
 
   // Esta función es asincrónica, hay que marcarla como tal.
   private async getLimitrofe(country: Country): Promise<Pais[]> {
-    const api = new RestCountriesAPI();
+    const api = new RestCountriesAPIMock();
 
     // Esto se vuelve una lista de Promise<Country>,
     // y tienen que esperarla si quieren seguir trabajando con ella.
@@ -57,7 +57,7 @@ export class Transformador {
     // );
   }
 
-  public countryApais(country: Country, cotizacion: number, limitrofe : Pais[] = []): Pais {
+  public countryApais(country: Country, cotizacion: number, limitrofe: Pais[] = []): Pais {
     return new Pais(
       country?.name ?? " ",
       country.alpha3Code,

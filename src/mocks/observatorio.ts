@@ -1,7 +1,7 @@
 import R from "ramda";
 import { Pais } from "../dominio/pais";
 import { Country } from "../api/rest_countries_api";
-import { RestCountriesAPI } from "./rest_countries_api";
+import { RestCountriesAPIMock } from "./rest_countries_api";
 import { Transformador } from "./transformador";
 import { ErrorDuplicado } from "../error/ErrorDuplicado";
 import { ErrorMuchosPaises } from "../error/ErrorMuchosPaises";
@@ -9,10 +9,10 @@ import { isEmpty } from "ramda";
 import { ErrorNoExiste } from "../error/ErrorNoExiste";
 export class Observatorio {
   public paises: Pais[] = [];
-  public api: RestCountriesAPI;
+  public api: RestCountriesAPIMock;
 
   constructor() {
-    this.api = new RestCountriesAPI();
+    this.api = new RestCountriesAPIMock();
   }
 
   private async obtenerTodosLosPaises() {
@@ -106,7 +106,7 @@ export class Observatorio {
     await this.obtenerTodosLosPaises();
     const resultado = {} as { [key: string]: number };
     this.paises.forEach((pais) => {
-      if(!pais.esPlurinacional())
+      if (!pais.esPlurinacional())
         return;
       if (!resultado[pais.continente]) {
         resultado[pais.continente] = 1;

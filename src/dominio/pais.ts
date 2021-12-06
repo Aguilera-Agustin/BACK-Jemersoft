@@ -55,19 +55,16 @@ export class Pais {
     }
 
     public esLimitrofeDe(pais: Pais): boolean {
-        return pais.paisesLimitrofes.filter(eachPais => eachPais.nombre === this.nombre).length > 0;
+        return pais.paisesLimitrofes.some(eachPais => eachPais.nombre === this.nombre);
     }
 
     public necesitaTraduccionCon(pais: Pais): boolean {
-        return this.idiomasOficiales.filter(idioma =>
-            pais.idiomasOficiales.indexOf(idioma) !== -1
-        ).length === 0;
+        
+        return this.idiomasOficiales.filter(idioma => pais.idiomasOficiales.includes(idioma)).length === 0;
     }
 
     public pertenecenAlMismoBloqueRegional(pais: Pais): boolean {
-        return this.bloquesRegionales.filter(bloque =>
-            pais.bloquesRegionales.indexOf(bloque) !== -1
-        ).length !== 0;
+        return this.bloquesRegionales.filter(bloque =>pais.bloquesRegionales.includes(bloque)).length !== 0;
     }
 
     public potencialAliadoDe(pais: Pais): boolean {
@@ -75,7 +72,7 @@ export class Pais {
     }
 
     public convieneIrDeComprasA(pais: Pais): boolean {
-        return this.cotizacionDolar > pais.cotizacionDolar ? false : true;
+        return this.cotizacionDolar <= pais.cotizacionDolar;
     }
 
     public cuantoEquivaleEn(monto: number, pais: Pais): number {

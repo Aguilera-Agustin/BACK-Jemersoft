@@ -1,7 +1,15 @@
-export class CurrencyConverterAPI {
-  constructor(private apiKey: string) {
-    this.apiKey = apiKey;
+import { RestAPI } from '../api/rest_api';
+export class CurrencyConverterAPI extends RestAPI{
+
+
+  constructor(public apiKey: string) {
+    super();
   }
+
+  get urlBase(): string {
+    return `https://free.currconv.com/api/v7/convert?compact=ultra&apiKey=${this.apiKey}`;
+  }
+ 
 
   async convertirDolarA(codigoMoneda: string): Promise<number> {
     switch (codigoMoneda) {

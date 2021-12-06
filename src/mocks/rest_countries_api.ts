@@ -1,6 +1,12 @@
 import { countriesMock } from "./rest_data";
-import { Country, RestCountriesAPI } from "../api/rest_countries_api";
-export class RestCountriesAPIMock extends RestCountriesAPI {
+import { Country } from "../api/rest_countries_api";
+import { RestAPI } from '../api/rest_api';
+import { mergeRight } from 'ramda';
+
+export class RestCountriesAPI extends RestAPI {
+  get urlBase(): string {
+    throw new Error("Method not implemented.");
+  }
   paises: Country[] = countriesMock;
 
   async todosLosPaises(): Promise<Country[]> {
@@ -19,4 +25,11 @@ export class RestCountriesAPIMock extends RestCountriesAPI {
     );
     return data!;
   }
+
+  inicializarCamposNulos = mergeRight({
+    borders: [],
+    regionalBlocs: [],
+    currencies: [],
+  });
+
 }

@@ -4,20 +4,16 @@ import { CurrencyConverterAPI } from '../api/currency_converter_api';
 
 export class Transformador {
     
-    public countries: Country[];
     public currencyApi : CurrencyConverterAPI;
 
-    constructor( countries :Country[]) {
-        this.countries = countries;
-        this.currencyApi = new CurrencyConverterAPI('d956ad8ad88fce288555');
-        
+    constructor( currencyApi : CurrencyConverterAPI ) {
+        this.currencyApi = currencyApi;
     }
 
-    public countriesApaises() :  Promise<Pais>[] {
-        return this.countries.map( async(country: Country) => { 
+    public countriesApaises(countries :Country[]) :  Promise<Pais>[] {
+        return countries.map( async(country: Country) => { 
             const limitrofe = await this.getLimitrofe(country);
-            //const cotizacion = await this.currencyApi.convertirDolarA(country.currencies[0]? country.currencies[0].code : 'USD');
-            const cotizacion=0
+            const cotizacion = await this.currencyApi.convertirDolarA(country.currencies[0]? country.currencies[0].code : 'USD');
             return this.countryApais(country, cotizacion, limitrofe);
 
         } )
@@ -39,8 +35,7 @@ export class Transformador {
         // Entonces hay que esperarlas :)
         return Promise.all(
           limitrofe.map(async (limitrofe) => {
-            //const cotizacion = await this.currencyApi.convertirDolarA(limitrofe.currencies[0]?.code ?? 'USD');
-            const cotizacion=0;
+            const cotizacion = await this.currencyApi.convertirDolarA(limitrofe.currencies[0]?.code ?? 'USD');
             return this.countryApais(limitrofe, cotizacion);
           })
         );
@@ -64,7 +59,7 @@ export class Transformador {
           country?.name ?? " ",
           country.alpha3Code,
           country.population,
-          country.area ? country.area : country.population,
+          country.area ?? country.population,
           country.region,
           country.currencies[0] ? country.currencies[0].code : "USD",
           cotizacion,

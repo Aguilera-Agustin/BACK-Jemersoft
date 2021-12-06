@@ -4,30 +4,32 @@ import { RestCountriesAPI, Country } from '../api/rest_countries_api';
 import { Transformador } from './transformador';
 import { isEmpty } from 'ramda';
 import { ErrorDuplicado, ErrorNoExiste, ErrorMuchosPaises } from '../error';
+import { CurrencyConverterAPI } from '../api/currency_converter_api';
 
 export class Observatorio {
 
     public paises: Pais[] = [];
     public api: RestCountriesAPI
-
+    public transformador: Transformador
+    public currency : CurrencyConverterAPI 
     constructor() {
         this.api = new RestCountriesAPI();
+        this.currency = new CurrencyConverterAPI('d956ad8ad88fce288555')
+        this.transformador = new Transformador(this.currency);
     }
 
     public async obtenerPorNombre(nombreDelPais: string): Promise<Pais> {
         const apiData = await this.api.buscarPaisesPorNombre(nombreDelPais);
         await this.validarMuchosPaises(apiData);
         await this.validarExistenciaPais(apiData);
-        const transformador = await new Transformador(apiData);
-        const data = await Promise.all(await transformador.countriesApaises());
+        const data = await Promise.all(await this.transformador.countriesApaises(apiData));
         return data[0];
     }
 
     private async obtenerTodosLosPaises() {
         if (this.paises.length === 0) {
             const apiData = await this.api.todosLosPaises();
-            const transformador = await new Transformador(apiData);
-            const data = await Promise.all(await transformador.countriesApaises());
+            const data = await Promise.all(await this.transformador.countriesApaises(apiData));
             this.paises = data;
         }
     }
@@ -76,7 +78,7 @@ export class Observatorio {
 
     public async losMasPoblados(): Promise<string[]> {
         await this.obtenerTodosLosPaises()
-        this.paises.sort((a, b) => a.poblacion > b.poblacion ? -1 : a.poblacion < b.poblacion ? 1 : 0)
+        this.paises.sort((a, b) => b.poblacion - a.poblacion)
         return this.paises.slice(0, 5).map(pais => pais.codigoIso3);
     }
 

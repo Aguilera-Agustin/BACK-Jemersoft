@@ -22,7 +22,7 @@ describe("Pais", () => {
         "America",
         "RS",
         6,
-        [argentina],
+        [],
         [],
         ["Portugues", "Español"],
     );
@@ -34,7 +34,7 @@ describe("Pais", () => {
         "America",
         "UYU",
         45,
-        [brazil, argentina],
+        [],
         ["MERCOSUR"],
         ["Español"],
     );
@@ -51,41 +51,42 @@ describe("Pais", () => {
         ["Ingles"],
     );
     argentina.paisesLimitrofes.push(brazil, uruguay);
-    brazil.paisesLimitrofes.push(uruguay);
+    uruguay.paisesLimitrofes.push(brazil, argentina);
+    brazil.paisesLimitrofes.push(uruguay, argentina);
 
 
     describe("Metodos para un pais", () => {
         describe("esPlurinacional", () => {
-            it('Argentina no es plurinacional', () => {
+            it('Pais no es plurinacional', () => {
                 expect(argentina.esPlurinacional()).toBe(false);
             })
-            it('Brazil es plurinacional', () => {
+            it('Pais es plurinacional', () => {
                 expect(brazil.esPlurinacional()).toBe(true);
             })
         });
 
         describe("esIsla", () => {
-            it('Uruguay no es isla', () => {
+            it('Pais no es isla', () => {
                 expect(uruguay.esIsla()).toBe(false);
             })
-            it('Hawai no es isla', () => {
+            it('Pais es isla', () => {
                 expect(hawai.esIsla()).toBe(true);
             })
         });
 
         describe("densidadPoblacional", () => {
-            it('Uruguay tiene una densidad poblacional de 17', () => {
+            it('Pais tiene una densidad poblacional de 17', () => {
                 expect(uruguay.densidadPoblacional()).toBe(17);
             })
         });
 
         describe("vecinoMasPoblado", () => {
-            it('Entre Argentina, Brazil y Uruguay el mas poblado es Brazil', () => {
+            it('Pais mas poblado entre varios', () => {
                 expect(argentina.vecinoMasPoblado()).toBe(brazil);
                 expect(uruguay.vecinoMasPoblado()).toBe(brazil);
                 expect(brazil.vecinoMasPoblado()).toBe(brazil);
             })
-            it('Entre Hawai el mas poblado es Hawai', () => {
+            it('El mismo pais es el mas poblado', () => {
                 expect(hawai.vecinoMasPoblado()).toBe(hawai);
             })
         });
@@ -93,30 +94,30 @@ describe("Pais", () => {
 
     describe("Metodos para mas de un pais", () => {
         describe("esLimitrofeDe", () => {
-            it('Argentina no es limitrofe de Hawai', () => {
+            it('Pais no es limitrofe', () => {
                 expect(argentina.esLimitrofeDe(hawai)).toBe(false);
             })
-            it('Brazil es limitrofe de Uruguay', () => {
+            it('Pais es limitrofe', () => {
                 expect(brazil.esLimitrofeDe(uruguay)).toBe(true);
             })
         });
 
         describe("necesitaTraduccionCon", () => {
-            it('Uruguay no necesita traduccion con Brazil', () => {
+            it('Pais no necesita traduccion', () => {
                 expect(uruguay.necesitaTraduccionCon(brazil)).toBe(false);
             })
-            it('Hawai necesita traduccion con Argentina', () => {
+            it('Pais necesita traduccion', () => {
                 expect(hawai.necesitaTraduccionCon(argentina)).toBe(true);
             })
         });
 
         describe("potencialAliadoDe", () => {
-            it('Uruguay es potencial aliado Argentina', () => {
+            it('Pais es potencial aliado', () => {
                 expect(uruguay.necesitaTraduccionCon(argentina)).toBe(false)
                 expect(uruguay.pertenecenAlMismoBloqueRegional(argentina)).toBe(true)
                 expect(uruguay.potencialAliadoDe(argentina)).toBe(true)
             })
-            it('Uruguay no es potencial aliado Brazil', () => {
+            it('Pais no es potencial aliado', () => {
                 expect(uruguay.necesitaTraduccionCon(brazil)).toBe(false)
                 expect(uruguay.pertenecenAlMismoBloqueRegional(brazil)).toBe(false)
                 expect(uruguay.potencialAliadoDe(brazil)).toBe(false)
@@ -124,19 +125,19 @@ describe("Pais", () => {
         });
 
         describe("convieneIrDeComprasA", () => {
-            it('No conviene de Argentina a Brazil', () => {
+            it('No conviene de ir al Pais', () => {
                 expect(argentina.convieneIrDeComprasA(brazil)).toBe(false);
             })
-            it('Conviene de Brazil a Argentina', () => {
+            it('Conviene ir al pais', () => {
                 expect(brazil.convieneIrDeComprasA(argentina)).toBe(true);
             })
         });
 
         describe("cuantoEquivaleEn", () => {
-            it('1000 pesos Argentinos equivalen a 30 reales', () => {
+            it('1000 monedas de un Pais equivalen a 30 de otro pais', () => {
                 expect(argentina.cuantoEquivaleEn(1000, brazil)).toBe(30);
             })
-            it('1000 pesos Uruguayos equivalen a 4510 pesos argentinos', () => {
+            it('1000 monedas de un Pais equivalen a 4510 de otro pais', () => {
                 expect(uruguay.cuantoEquivaleEn(1000, argentina)).toBe(4510);
             })
         });

@@ -41,17 +41,17 @@ export class Pais {
         return Math.round(this.poblacion / this.superficie);
     }
 
-    public vecinoMasPoblado(): Pais | undefined {
-        const poblacionDePaisesLimitrofes = this.paisesLimitrofes.map((pais) => {
-            return pais.poblacion;
+    public vecinoMasPoblado(): Pais {
+        const listaOrdenada = this.paisesLimitrofes.sort((pais1, pais2) => {
+            if (pais1.poblacion < pais2.poblacion) {
+                return 1;
+            } else if (pais1.poblacion > pais2.poblacion) {
+                return -1;
+            } else {
+                return 0;
+            }
         });
-        poblacionDePaisesLimitrofes.push(this.poblacion);
-        const mayorPoblacion = Math.max(...poblacionDePaisesLimitrofes)
-        if (this.poblacion === mayorPoblacion) {
-            return this;
-        } else {
-            return this.paisesLimitrofes.find(pais => pais.poblacion === mayorPoblacion);
-        }
+        return listaOrdenada[0];
     }
 
     public esLimitrofeDe(pais: Pais): boolean {
@@ -59,12 +59,12 @@ export class Pais {
     }
 
     public necesitaTraduccionCon(pais: Pais): boolean {
-        
+
         return this.idiomasOficiales.filter(idioma => pais.idiomasOficiales.includes(idioma)).length === 0;
     }
 
     public pertenecenAlMismoBloqueRegional(pais: Pais): boolean {
-        return this.bloquesRegionales.filter(bloque =>pais.bloquesRegionales.includes(bloque)).length !== 0;
+        return this.bloquesRegionales.filter(bloque => pais.bloquesRegionales.includes(bloque)).length !== 0;
     }
 
     public potencialAliadoDe(pais: Pais): boolean {

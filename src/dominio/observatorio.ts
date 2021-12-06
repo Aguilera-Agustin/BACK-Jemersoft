@@ -11,7 +11,7 @@ export class Observatorio {
     public paises: Pais[] = [];
     public api: RestCountriesAPI
     public transformador: Transformador
-    public currency : CurrencyConverterAPI 
+    public currency: CurrencyConverterAPI
     constructor() {
         this.api = new RestCountriesAPI();
         this.currency = new CurrencyConverterAPI('d956ad8ad88fce288555')

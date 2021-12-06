@@ -79,22 +79,22 @@ export default {
           const monto = consola.leer("Ingresa el monto:");
           console.clear();
           consola.escribir("Saber cuanto equivale el cambio de moneda");
-          consola.escribir(await (await observatorio.cuantoEquivale(parseInt(monto), primerPais, segundoPais)).toString());
+          consola.escribir((await observatorio.cuantoEquivale(parseInt(monto), primerPais, segundoPais)).toString());
           break
         case "3.1":
           console.clear();
           consola.escribir("Saber los códigos ISO de los 5 países con mayor densidad poblacional");
-          consola.escribir(await (await observatorio.losMasPoblados()).toString());
+          consola.escribir((await observatorio.losMasPoblados()).toString());
           break
         case "3.2":
           console.clear();
           consola.escribir("Saber el nombre del continente con más paises plurinacionales");
-          consola.escribir(await (await observatorio.continenteConMasPaisesPlurinacionales()).toString());
+          consola.escribir((await observatorio.continenteConMasPaisesPlurinacionales()).toString());
           break
         case "3.3":
           console.clear();
           consola.escribir("Saber el promedio de densidad poblacional de los países que son islas");
-          consola.escribir(await (await observatorio.promedioDeDensidadPoblacional()).toString());
+          consola.escribir((await observatorio.promedioDeDensidadPoblacional()).toString());
           break
         case "4":
           console.clear();

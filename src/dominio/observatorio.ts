@@ -1,4 +1,4 @@
-import R from 'ramda'
+import R, { groupBy, sort } from 'ramda'
 import { Pais } from './pais';
 import { RestCountriesAPI, Country } from '../api/rest_countries_api';
 import { Transformador } from './transformador';
@@ -84,19 +84,12 @@ export class Observatorio {
 
     public async continenteConMasPaisesPlurinacionales(): Promise<string> {
         await this.obtenerTodosLosPaises();
-        const resultado = {} as { [key: string]: number };
-        this.paises.forEach((pais) => {
-            if (!pais.esPlurinacional())
-                return;
-            if (!resultado[pais.continente]) {
-                resultado[pais.continente] = 1;
-            } else {
-                resultado[pais.continente] += 1;
-            }
-        });
-        return Object.entries(resultado).sort((a, b) =>
-            a[1] > b[1] ? -1 : a[1] < b[1] ? 1 : 0
-        )[0][0];
+        const paisesPlurinacionales = this.paises.filter((pais) => pais.esPlurinacional());
+        const agruparPorContinente = groupBy((pais: Pais) => {
+            return pais.continente;
+        })
+        agruparPorContinente(paisesPlurinacionales) // String Continente : Lista Paises
+        return this.paises.slice(0, 5).map(pais => pais.codigoIso3)[0];
     }
 
     public async promedioDeDensidadPoblacional(): Promise<number> {

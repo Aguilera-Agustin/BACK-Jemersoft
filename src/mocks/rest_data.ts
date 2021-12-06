@@ -364,7 +364,7 @@ export const countriesMock: Country[] = [
     area: 505992,
     borders: [],
     currencies: [{ code: "EUR" }],
-    languages: [{ name: "Spanish" }],
+    languages: [{ name: "Spanish" }, { name: "English" }],
     regionalBlocs: [{ acronym: "EU", name: "European Union" }],
   },
   {

@@ -1,4 +1,4 @@
-import R, { groupBy, sort } from 'ramda'
+import R, { compose, groupBy, head, last, length, sort, sortBy, toPairs } from 'ramda'
 import { Pais } from './pais';
 import { RestCountriesAPI, Country } from '../api/rest_countries_api';
 import { Transformador } from './transformador';
@@ -83,12 +83,30 @@ export class Observatorio {
         return this.paises.slice(0, 5).map(pais => pais.codigoIso3);
     }
 
+    //public async continenteConMasPaisesPlurinacionales(): Promise<string> {
+    //await this.obtenerTodosLosPaises();
+    //const paisesPlurinacionales = this.paises.filter((pais) => pais.esPlurinacional());
+    //const agruparPorContinente = groupBy((pais: Pais) => pais.continente);
+    //const data = agruparPorContinente(paisesPlurinacionales).toString();
+    //const continenteConMasPaises = compose(head, last, sortBy(([continente, paises]) => length(paises)), toPairs);
+    //return this.paises.slice(0, 5).map(pais => pais.codigoIso3)[0];
+    //}
+
     public async continenteConMasPaisesPlurinacionales(): Promise<string> {
         await this.obtenerTodosLosPaises();
-        const paisesPlurinacionales = this.paises.filter((pais) => pais.esPlurinacional());
-        const agruparPorContinente = groupBy((pais: Pais) => pais.continente);
-        const data = agruparPorContinente(paisesPlurinacionales);
-        return this.paises.slice(0, 5).map(pais => pais.codigoIso3)[0];
+        const resultado = {} as { [key: string]: number };
+        this.paises.forEach((pais) => {
+            if (!pais.esPlurinacional())
+                return;
+            if (!resultado[pais.continente]) {
+                resultado[pais.continente] = 1;
+            } else {
+                resultado[pais.continente] += 1;
+            }
+        });
+        return Object.entries(resultado).sort((a, b) =>
+            a[1] > b[1] ? -1 : a[1] < b[1] ? 1 : 0
+        )[0][0];
     }
 
     public async promedioDeDensidadPoblacional(): Promise<number> {

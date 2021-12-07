@@ -50,6 +50,7 @@ export class Pais {
             }
             return 0;
         });
+        listaOrdenada[0].paisesLimitrofes = []
         return listaOrdenada[0];
     }
 

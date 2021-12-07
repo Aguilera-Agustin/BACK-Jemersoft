@@ -81,13 +81,7 @@ describe("Pais", () => {
 
         describe("vecinoMasPoblado", () => {
             it('Pais mas poblado entre varios', () => {
-                //TODO Arreglar
-                //expect(argentina.vecinoMasPoblado()).toBe(brazil); 
-                //expect(uruguay.vecinoMasPoblado()).toBe(brazil);
-                //expect(brazil.vecinoMasPoblado()).toBe(brazil);
-            })
-            it('El mismo pais es el mas poblado', () => {
-                // expect(hawai.vecinoMasPoblado()).toBe(hawai);
+                expect(argentina.vecinoMasPoblado()).toBe(brazil);
             })
         });
     });

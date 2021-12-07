@@ -89,7 +89,7 @@ describe("Observatorio", () => {
       it("Africa es el pais con mas plurinacionales", async () => {
         expect(
           await observatorio.continenteConMasPaisesPlurinacionales()
-        ).toEqual("USA"); // TODO Arreglar
+        ).toEqual("Americas"); // TODO Arreglar
       });
     });
 

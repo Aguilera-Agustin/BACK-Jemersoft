@@ -5,6 +5,7 @@ import { Transformador } from './transformador';
 import { isEmpty } from 'ramda';
 import { ErrorDuplicado, ErrorNoExiste, ErrorMuchosPaises } from '../error';
 import { CurrencyConverterAPI } from '../api/currency_converter_api';
+import { stringify } from 'querystring';
 
 export class Observatorio {
 
@@ -85,10 +86,8 @@ export class Observatorio {
     public async continenteConMasPaisesPlurinacionales(): Promise<string> {
         await this.obtenerTodosLosPaises();
         const paisesPlurinacionales = this.paises.filter((pais) => pais.esPlurinacional());
-        const agruparPorContinente = groupBy((pais: Pais) => {
-            return pais.continente;
-        })
-        agruparPorContinente(paisesPlurinacionales) // String Continente : Lista Paises
+        const agruparPorContinente = groupBy((pais: Pais) => pais.continente);
+        const data = agruparPorContinente(paisesPlurinacionales);
         return this.paises.slice(0, 5).map(pais => pais.codigoIso3)[0];
     }
 
